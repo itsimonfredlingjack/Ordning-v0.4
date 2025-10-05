@@ -1,0 +1,31 @@
+name: Deploy to Hetzner Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Hetzner via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HETZNER_HOST }}
+          username: ${{ secrets.HETZNER_USER }}
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          port: 22
+          script: |
+            export PATH="$HOME/.npm-global/bin:$PATH"
+            cd /home/simon/apps/ordning-v0.4
+            git pull origin main
+            npm ci
+            cd backend && npm ci && cd ..
+            npm run build
+            pm2 restart ordning-v0.4 || pm2 start ecosystem.config.js --name "ordning-v0.4"
+            pm2 save

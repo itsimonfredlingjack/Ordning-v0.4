@@ -1,0 +1,7 @@
+{
+  "name": "ORDNING - AI Productivity Assistant",
+  "description": "A photorealistic concept UI for a flagship AI productivity app. The design features a deep charcoal theme, frosted glass elements, and cinematic ambient lighting, exuding calm sophistication and premium craftsmanship.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
