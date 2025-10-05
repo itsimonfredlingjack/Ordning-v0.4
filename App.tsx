@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Message, Task, CalendarEvent, MessageAuthor } from './types';
 import ChatMessage from './components/ChatMessage';
 import FocusWindow from './components/FocusWindow';
 import ChatInput from './components/ChatInput';
 import MobileEventHeader from './components/MobileEventHeader';
-import { createChat } from './services/geminiService';
-import { Chat } from '@google/genai';
+import { getChatCompletion } from './services/openaiService';
 
 // Mock Data
 const initialTasks: Task[] = [
@@ -26,30 +25,25 @@ const getNextEvent = (): CalendarEvent => {
 
 const App: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
-      { id: '1', text: 'Welcome to ORDNING. How can I assist you today?', author: MessageAuthor.AI }
+      { id: 'init', text: 'Welcome to ORDNING. How can I assist you today?', author: MessageAuthor.AI }
   ]);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [nextEvent, setNextEvent] = useState<CalendarEvent>(getNextEvent());
   const [isLoading, setIsLoading] = useState(false);
-  
-  const chatInstance = useMemo<Chat | null>(() => {
-    try {
-      return createChat();
-    } catch (e) {
-      console.error(e);
-      // Display error message in chat
-      setMessages(prev => [...prev, {
-          id: 'error-init',
-          text: 'Error: Could not initialize AI chat. Please check your API key.',
-          author: MessageAuthor.AI
-      }]);
-      return null;
-    }
-  }, []);
+  const [isFocusLoading, setIsFocusLoading] = useState(true);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // Simulate fetching data for the Focus Window
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsFocusLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat on new messages
     chatContainerRef.current?.scrollTo({
       top: chatContainerRef.current.scrollHeight,
       behavior: 'smooth',
@@ -57,32 +51,30 @@ const App: React.FC = () => {
   }, [messages]);
 
   const handleSendMessage = async (text: string) => {
-    if (!chatInstance) {
-        console.error("Chat not initialized.");
-        return;
-    }
-    
     const userMessage: Message = {
       id: String(Date.now()),
       text,
       author: MessageAuthor.USER,
     };
-    setMessages(prev => [...prev, userMessage]);
+
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setIsLoading(true);
 
     try {
-      const response = await chatInstance.sendMessage({ message: text });
+      // We only send the messages, not the initial welcome.
+      const aiResponse = await getChatCompletion(newMessages.slice(1));
       const aiMessage: Message = {
         id: String(Date.now() + 1),
-        text: response.text,
+        text: aiResponse,
         author: MessageAuthor.AI,
       };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error("Gemini API error:", error);
+      console.error("OpenAI API error:", error);
       const errorMessage: Message = {
         id: String(Date.now() + 1),
-        text: "Sorry, I encountered an error. Please try again.",
+        text: "Sorry, I encountered an error. Please check the console or try again.",
         author: MessageAuthor.AI,
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -111,11 +103,11 @@ const App: React.FC = () => {
             ))}
             {isLoading && (
               <div className="flex justify-start mb-6">
-                 <div className="max-w-xl px-5 py-3 rounded-2xl bg-white/5 amethyst-hairline">
+                 <div className="max-w-xl px-4 py-3 rounded-2xl bg-white/5 amethyst-hairline">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-[#9B59B6] rounded-full animate-pulse delay-0"></div>
-                    <div className="w-2 h-2 bg-[#9B59B6] rounded-full animate-pulse delay-150"></div>
-                    <div className="w-2 h-2 bg-[#9B59B6] rounded-full animate-pulse delay-300"></div>
+                    <span className="w-2.5 h-2.5 bg-[#9B59B6] rounded-full animate-pulse" style={{ animationDelay: '0s', animationDuration: '1s' }}></span>
+                    <span className="w-2.5 h-2.5 bg-[#9B59B6] rounded-full animate-pulse" style={{ animationDelay: '0.2s', animationDuration: '1s' }}></span>
+                    <span className="w-2.5 h-2.5 bg-[#9B59B6] rounded-full animate-pulse" style={{ animationDelay: '0.4s', animationDuration: '1s' }}></span>
                   </div>
                  </div>
               </div>
@@ -128,7 +120,7 @@ const App: React.FC = () => {
 
         {/* Right Pane: Focus Window */}
         <div className="flex-[3] h-full hidden lg:block">
-          <FocusWindow tasks={tasks} event={nextEvent} />
+          <FocusWindow tasks={tasks} event={nextEvent} isLoading={isFocusLoading} />
         </div>
       </main>
     </div>

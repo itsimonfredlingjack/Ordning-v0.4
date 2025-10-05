@@ -12,13 +12,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   return (
     <div className={`flex w-full mb-6 ${isAI ? 'justify-start' : 'justify-end'}`}>
       <div
-        className={`max-w-xl px-5 py-3 rounded-2xl transition-all duration-300 ${
+        className={`max-w-[75%] px-4 py-2 rounded-2xl transition-all duration-300 ${
           isAI
             ? 'bg-white/5 amethyst-hairline text-left'
             : 'bg-black/20 text-right'
         }`}
       >
-        <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
+        <p className="whitespace-pre-wrap leading-relaxed font-normal">{message.text}</p>
       </div>
     </div>
   );

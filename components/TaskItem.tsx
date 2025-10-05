@@ -13,9 +13,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   return (
     <div
       onClick={() => setIsCompleted(!isCompleted)}
-      className="flex items-center justify-between p-3 frosted-glass rounded-lg soft-shadow cursor-pointer hover:bg-white/10 transition-all duration-300"
+      className="flex items-center justify-between p-3 frosted-glass-card rounded-lg soft-shadow cursor-pointer border border-transparent hover:border-[#9B59B6]/40 transition-all duration-300"
     >
-      <p className={`transition-colors duration-300 ${isCompleted ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
+      <p className={`transition-colors duration-300 font-medium ${isCompleted ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
         {task.text}
       </p>
       <div className={`w-6 h-6 flex-shrink-0 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${isCompleted ? 'bg-[#9B59B6] border-[#9B59B6]' : 'border-gray-500'}`}>

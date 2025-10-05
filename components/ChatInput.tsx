@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
     }
   };
 
-  const placeholderText = isRecording ? "Listening..." : "Type your message or press mic...";
+  const placeholderText = isRecording ? "Listening..." : "Prata med ordning här...";
 
   return (
     <div className="relative w-full">
@@ -53,20 +53,20 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading }) => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={placeholderText}
           disabled={isLoading || isRecording}
-          className="w-full pl-6 pr-28 py-4 bg-black/20 text-[#F5F5F5] placeholder:text-gray-500 rounded-full border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#9B59B6]/50 transition-all duration-300"
+          className="w-full pl-6 pr-28 py-4 bg-black/20 text-[#F5F5F5] placeholder:text-gray-500 rounded-full border border-white/10 focus:outline-none focus:ring-0 focus:border-[#9B59B6]/80 focus:shadow-[0_0_24px_0px_rgba(155,89,182,0.3)] transition-all duration-300"
         />
         <div className="absolute right-4 flex items-center space-x-2">
           <button
             type="button"
             onClick={handleMicClick}
             disabled={isInitializing}
-            className={`p-2 rounded-full transition-all duration-300 ${
-              isRecording 
-                ? 'bg-[#9B59B6] text-white amethyst-glow-heavy' 
-                : 'text-gray-400 hover:bg-white/10 hover:text-white'
+            className={`p-2 rounded-full transition-all duration-300 group ${
+              isRecording
+                ? 'bg-[#9B59B6] text-white amethyst-glow-heavy animate-mic-pulse'
+                : 'text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
-            <MicrophoneIcon className="w-6 h-6" />
+            <MicrophoneIcon className={`w-6 h-6 transition-transform duration-300 ${!isRecording ? 'group-hover:scale-110' : ''}`} />
           </button>
           <button
             type="submit"
