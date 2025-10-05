@@ -25,6 +25,7 @@ jobs:
             cd /home/simon/apps/ordning-v0.4
             git fetch origin main
             git reset --hard origin/main
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
             npm ci
             cd backend && npm ci && cd ..
             npm run build
