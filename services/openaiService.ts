@@ -28,10 +28,19 @@ export async function getChatCompletion(messages: Message[]): Promise<string> {
       throw new Error(`Failed to fetch response from n8n webhook: ${response.status}`);
     }
 
-    const data = await response.json();
+    // Try to parse as JSON first, fall back to plain text
+    const contentType = response.headers.get('content-type');
+    let responseText: string;
 
-    // Extract the response from n8n - adjust based on your webhook's response format
-    return data.response || data.message || data.text || "Sorry, I couldn't generate a response.";
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      responseText = data.response || data.message || data.text || "Sorry, I couldn't generate a response.";
+    } else {
+      // Handle plain text response
+      responseText = await response.text();
+    }
+
+    return responseText || "Sorry, I couldn't generate a response.";
 
   } catch (error) {
     console.error("Error calling n8n webhook:", error);
