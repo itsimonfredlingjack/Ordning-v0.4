@@ -24,7 +24,7 @@ export async function getChatCompletion(messages: Message[]): Promise<string> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: lastUserMessage.text,
+        user_message: lastUserMessage.text,
         conversation_history: conversationHistory
       }),
     });
