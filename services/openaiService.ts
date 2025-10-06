@@ -11,6 +11,12 @@ export async function getChatCompletion(messages: Message[]): Promise<string> {
     return "Sorry, I couldn't find your message.";
   }
 
+  // Build conversation history for n8n
+  const conversationHistory = messages.map(msg => ({
+    role: msg.author === MessageAuthor.USER ? 'user' : 'assistant',
+    content: msg.text
+  }));
+
   try {
     const response = await fetch(WEBHOOK_URL, {
       method: 'POST',
@@ -19,6 +25,7 @@ export async function getChatCompletion(messages: Message[]): Promise<string> {
       },
       body: JSON.stringify({
         message: lastUserMessage.text,
+        conversation_history: conversationHistory
       }),
     });
 
@@ -34,7 +41,8 @@ export async function getChatCompletion(messages: Message[]): Promise<string> {
 
     if (contentType && contentType.includes('application/json')) {
       const data = await response.json();
-      responseText = data.response || data.message || data.text || "Sorry, I couldn't generate a response.";
+      // n8n returns { message: "..." }
+      responseText = data.message || data.response || data.text || "Sorry, I couldn't generate a response.";
     } else {
       // Handle plain text response
       responseText = await response.text();
