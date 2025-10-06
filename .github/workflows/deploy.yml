@@ -1,6 +1,5 @@
-name: Deploy to Hetzner Server
- - name: Claude Code Action Official
-   uses: anthropics/claude-code-action@v1
+- name: Claude Code Action Official
+  uses: anthropics/claude-code-action@v1
 
 on:
   push:
