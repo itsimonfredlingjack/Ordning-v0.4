@@ -1,5 +1,4 @@
 name: Claude Code Action Official
- uses: anthropics/claude-code-action@v1
 
 on:
   push:
@@ -9,11 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
       - name: Deploy to Hetzner via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
