@@ -12,8 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
-      - name: Claude Code Action Official
-        uses: anthropics/claude-code-action@v1
+      - name: Claude Code Review
+        uses: anthropics/claude-code-base-action@beta
+        with:
+          claude_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: "Review the code changes in this commit for bugs and improvements"
+          allowed_tools: "Bash(git:*),View,GlobTool,GrepTool"
       
       - name: Deploy to Hetzner via SSH
         uses: appleboy/ssh-action@v1.0.3
