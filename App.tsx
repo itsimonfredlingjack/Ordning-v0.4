@@ -111,7 +111,7 @@ Du är här för att göra deras liv enklare, inte filosofera.`
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user_message: "Greet me with a unique, thought-provoking question about the universe or creativity.",
+            user_message: "Hälsa användaren välkommen till ORDNING och fråga hur du kan hjälpa dem idag.",
             conversation_history: conversationHistory
           }),
         });
