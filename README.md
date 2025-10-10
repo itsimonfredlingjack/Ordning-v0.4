@@ -1,20 +1,65 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ORDNING v0.4
 
-# Run and deploy your AI Studio app
+En kreativ och filosofisk AI-kompanjon med ett elegant orange tema.
 
-This contains everything you need to run your app locally.
+## Funktioner
 
-View your app in AI Studio: https://ai.studio/apps/drive/12KcZN442p_Q-07VZMrSvJ7K12tmK7QTZ
+- 🎨 **Orange Aura Design** - Elegant orb-baserat gränssnitt med flytande partiklar
+- 💭 **Thought Bubbles** - Meddelanden flyter upp som tankebubblor
+- 📜 **Memory Stream** - Klicka på orben för att visa chatthistorik
+- ✨ **Smooth Animationer** - Breath- och pulse-effekter för orben
+- 🌊 **Flowing Particles** - Dynamiska partiklar i bakgrunden
 
-## Run Locally
+## Kör Lokalt
 
-**Prerequisites:**  Node.js
+**Krav:** Node.js
 
+1. Installera dependencies:
+   ```bash
+   npm install
+   ```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+2. Starta dev-server:
+   ```bash
+   npm run dev
+   ```
+
+3. Öppna i webbläsare:
+   ```
+   http://localhost:3000
+   ```
+
+## Teknisk Stack
+
+- React 19
+- TypeScript
+- Vite
+- OpenAI via n8n webhook
+- CSS Animations
+
+## API Integration
+
+Appen använder n8n webhook för OpenAI-integration:
+- Webhook URL: `https://n8n.fredlingautomation.dev/webhook/ordning-test`
+- Skickar conversation history och user messages
+- Tar emot AI-svar i JSON-format
+
+## Design Koncept
+
+ORDNING har en unik "Aura"-design med:
+- **Ordning Orb**: En andande, roterande orb i orange toner
+- **Floating Bubbles**: Meddelanden som flyter upp och försvinner
+- **Memory Stream**: Full historik med glassmorfism-effekt
+- **Warm Orange Palette**: #D4895F (primary) och #4DB6AC (secondary)
+
+## Bygg för Produktion
+
+```bash
+npm run build
+```
+
+Detta skapar en optimerad build i `dist/` mappen.
+
+## Deploy
+
+Appen är redo att deployera till Vercel, Netlify eller liknande plattformar.
