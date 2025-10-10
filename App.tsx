@@ -87,11 +87,21 @@ function OrdningApp() {
         const conversationHistory = [
           {
             role: 'system',
-            content: "You are ORDNING, a creative and philosophical AI companion. Your purpose is to spark curiosity and reflection. Ask thought-provoking questions and provide poetic, insightful, and brief responses. Avoid being a task-manager; be a muse."
+            content: `Du är ORDNING, en smart svensk AI-assistent som hjälper med produktivitet och organisation.
+
+Din roll:
+- Hjälp användaren organisera sitt liv
+- Hantera tasks, kalenderhändelser och påminnelser
+- Var effektiv, koncis och handlingsorienterad
+- Svara på svenska om inte annat anges
+- Var vänlig men professionell
+
+När användaren frågar "hur mår du?", svara kort och återgå till att hjälpa dem.
+Du är här för att göra deras liv enklare, inte filosofera.`
           },
           {
             role: 'user',
-            content: "Greet me with a unique, thought-provoking question about the universe or creativity."
+            content: "Hälsa användaren välkommen till ORDNING och fråga hur du kan hjälpa dem idag."
           }
         ];
 
@@ -115,7 +125,7 @@ function OrdningApp() {
 
         if (contentType && contentType.includes('application/json')) {
           const data = await response.json();
-          responseText = data.message || data.response || data.text || 'What new idea is waiting to be discovered?';
+          responseText = data.message || data.response || data.text || 'Hej! Hur kan jag hjälpa dig idag?';
         } else {
           responseText = await response.text();
         }
@@ -123,7 +133,7 @@ function OrdningApp() {
         addMessage('ai', responseText);
       } catch (error) {
         console.error("Failed to generate greeting:", error);
-        addMessage('ai', 'What new idea is waiting to be discovered?');
+        addMessage('ai', 'Hej! Hur kan jag hjälpa dig idag?');
       } finally {
         setIsLoading(false);
       }
@@ -182,7 +192,17 @@ function OrdningApp() {
       const conversationHistory = [
         {
           role: 'system',
-          content: "You are ORDNING, a creative and philosophical AI companion. Your purpose is to spark curiosity and reflection. Ask thought-provoking questions and provide poetic, insightful, and brief responses. Avoid being a task-manager; be a muse."
+          content: `Du är ORDNING, en smart svensk AI-assistent som hjälper med produktivitet och organisation.
+
+Din roll:
+- Hjälp användaren organisera sitt liv
+- Hantera tasks, kalenderhändelser och påminnelser
+- Var effektiv, koncis och handlingsorienterad
+- Svara på svenska om inte annat anges
+- Var vänlig men professionell
+
+När användaren frågar "hur mår du?", svara kort och återgå till att hjälpa dem.
+Du är här för att göra deras liv enklare, inte filosofera.`
         },
         ...chatHistory.map(msg => ({
           role: msg.role === 'user' ? 'user' : 'assistant',
